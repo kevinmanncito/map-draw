@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Components render correctly AutoCompleteAddressField renders correctly 1`] = `
+<div>
+  <input
+    className="autocomplete-field"
+    id="autocomplete"
+    type="text"
+  />
+</div>
+`;
+
+exports[`Components render correctly Header renders correctly 1`] = `
+<header
+  className="header"
+>
+  <h1>
+    Test Title
+  </h1>
+  <AutoCompleteAddressField
+    coordsFound={[Function]}
+    placeholder="Enter address"
+  />
+</header>
+`;
+
+exports[`Components render correctly InteractiveMap renders correctly 1`] = `
+<div
+  className="content"
+  id="map"
+/>
+`;

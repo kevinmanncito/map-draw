@@ -1,0 +1,19 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["standard", "standard-react"],
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "comma-dangle": ["error", "always-multiline"]
+  },
+  "globals": {
+    "describe": false,
+    "it": false,
+    "expect": false,
+    "jest": false,
+    "mapboxgl": false,
+    "turf": false,
+    "MapboxDraw": false
+  }
+}
