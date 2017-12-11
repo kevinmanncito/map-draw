@@ -10,45 +10,48 @@ class InteractiveMap extends React.Component {
     }).isRequired,
   }
   map = undefined
-  draw = undefined
+  drawingManager = undefined
 
   componentWillReceiveProps (props) {
-    this.map.setCenter([props.coords.lon, props.coords.lat])
-    this.map.setZoom(18)
+    this.map.setCenter({lat: props.coords.lat, lng: props.coords.lon})
+    this.map.setZoom(26)
+    this.map.setTilt(0)
   }
 
   componentDidMount () {
     this.updateArea = this.updateArea.bind(this)
 
-    mapboxgl.accessToken = 'pk.eyJ1Ijoia2V2aW5ybWFubiIsImEiOiJBTWUyS05zIn0.ZPXjYLQs4QIJiqp85cfI0w'
-    this.map = new mapboxgl.Map({
-      container: 'map', // container id
-      style: 'mapbox://styles/kevinrmann/cjaj68e7dakuc2slmhkk3bav6', // hosted style id
-      center: [this.props.coords.lat, this.props.coords.lon],
-      zoom: 4, // starting zoom
+    this.map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: this.props.coords.lat, lng: this.props.coords.lon},
+      zoom: 5,
+      mapTypeId: 'satellite',
     })
 
-    this.draw = new MapboxDraw({
-      displayControlsDefault: false,
-      controls: {
-        polygon: true,
-        trash: true,
+    this.drawingManager = new google.maps.drawing.DrawingManager({
+      drawingMode: google.maps.drawing.OverlayType.POLYGON,
+      drawingControl: true,
+      drawingControlOptions: {
+        position: google.maps.ControlPosition.TOP_CENTER,
+        drawingModes: ['polygon', 'polyline'],
+      },
+      circleOptions: {
+        fillColor: '#ffff00',
+        fillOpacity: 1,
+        strokeWeight: 5,
+        clickable: false,
+        editable: true,
+        zIndex: 1,
       },
     })
-    this.map.addControl(this.draw)
-
-    this.map.on('draw.create', this.updateArea)
-    this.map.on('draw.delete', this.updateArea)
-    this.map.on('draw.update', this.updateArea)
+    this.drawingManager.setMap(this.map)
+    google.maps.event.addListener(this.drawingManager, 'overlaycomplete', this.updateArea)
   }
 
   updateArea (e) {
-    const data = this.draw.getAll()
-    if (data.features.length > 0) {
-      const area = turf.area(data)
+    const overlay = e.overlay
+    if (overlay.getPath) {
+      const area = google.maps.geometry.spherical.computeArea(overlay.getPath())
       this.props.areaCalculated(area)
-    } else {
-      this.props.areaCalculated(undefined)
     }
   }
 

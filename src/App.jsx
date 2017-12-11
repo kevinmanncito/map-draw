@@ -7,11 +7,12 @@ class App extends React.Component {
   STEP_ONE_LABEL = 'Step 1: Find your house'
   STEP_TWO_LABEL = 'Step 2: Draw a point on the corners of your roof'
 
+  // {lat: -34.397, lng: 150.644}
   state = {
     area: undefined,
     coords: {
-      lat: -95.587,
-      lon: 41.313,
+      lat: -34.387,
+      lon: 150.644,
     },
     currentStep: this.STEP_ONE_LABEL,
   }
