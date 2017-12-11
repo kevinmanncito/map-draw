@@ -39,18 +39,29 @@ describe('Components render correctly', () => {
   })
 
   it('InteractiveMap renders correctly', () => {
-    class mapStub {
-      addControl () {
-        return null
-      }
-      on () {
+    const mapStub = sinon.stub()
+    class drawingManagerStub {
+      setMap () {
         return null
       }
     }
-    global.mapboxgl = {
-      Map: mapStub,
+    global.google = {
+      maps: {
+        ControlPosition: {
+          TOP_CENTER: '',
+        },
+        Map: mapStub,
+        event: {
+          addListener: jest.fn(),
+        },
+        drawing: {
+          DrawingManager: drawingManagerStub,
+          OverlayType: {
+            POLYGON: '',
+          },
+        },
+      },
     }
-    global.MapboxDraw = sinon.stub()
     const wrapper = shallow(
       <InteractiveMap
         areaCalculated={jest.fn()}
